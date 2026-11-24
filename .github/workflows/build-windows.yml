@@ -5,6 +5,51 @@ on:
   push:
     branches:
       - main
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Verify FFmpeg files
+        shell: pwsh
+        run: |
+          if (!(Test-Path "bin\ffmpeg.exe")) {
+            throw "Missing bin\ffmpeg.exe"
+          }
+          if (!(Test-Path "bin\ffprobe.exe")) {
+            throw "Missing bin\ffprobe.exe"
+          }
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build EXE
+        run: |
+          python -m PyInstaller --clean --noconfirm AzHomeMediaDownloader.spec
+
+      - name: Check build result
+        shell: pwsh
+        run: |
+          if (!(Test-Path "dist\AzHomeMediaDownloader.exe")) {
+            throw "EXE was not created"
+          }
+
       - name: Upload Windows EXE
         uses: actions/upload-artifact@v4
         with:
