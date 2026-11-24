@@ -40,6 +40,10 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install pyinstaller
 
+      - name: Verify PySide6
+        run: |
+          python -c "import PySide6; print('PySide6:', PySide6.__version__)"
+
       - name: Build EXE
         run: |
           python -m PyInstaller --clean --noconfirm AzHomeMediaDownloader.spec
