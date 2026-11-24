@@ -1,3 +1,13 @@
-git add .github/workflows/build-windows.yml
-git commit -m "Add Windows build workflow"
-git push
+name: Build Windows EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - name: Upload Windows EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: AzHomeMediaDownloader-Windows
+          path: dist/AzHomeMediaDownloader.exe
+          if-no-files-found: error
