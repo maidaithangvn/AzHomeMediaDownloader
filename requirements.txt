@@ -1,0 +1,6 @@
+PySide6>=6.4.0
+yt-dlp>=2024.3.10
+certifi
+
+tạo lại .exe Windows. Trên Windows, chạy tại thư mục dự án:
+pyinstaller --clean --noconfirm AzHomeMediaDownloader.spec
